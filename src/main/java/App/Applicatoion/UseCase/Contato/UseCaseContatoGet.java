@@ -5,11 +5,11 @@ import App.Infra.Ports.ContatoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public class UseCaseUsuarioGet {
+public class UseCaseContatoGet {
 
     private final ContatoService contatoService;
 
-    public UseCaseUsuarioGet(ContatoService contatoService) {
+    public UseCaseContatoGet(ContatoService contatoService) {
         this.contatoService = contatoService;
     }
 

@@ -3,11 +3,11 @@ package App.Applicatoion.UseCase.Contato;
 import App.Infra.Ports.ContatoService;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public class UseCaseUsuarioDelete {
+public class UseCaseContatoDelete {
 
     private final ContatoService contatoService;
 
-    public UseCaseUsuarioDelete(ContatoService contatoService) {
+    public UseCaseContatoDelete(ContatoService contatoService) {
         this.contatoService = contatoService;
     }
 

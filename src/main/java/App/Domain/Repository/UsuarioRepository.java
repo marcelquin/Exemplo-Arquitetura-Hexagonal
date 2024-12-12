@@ -9,11 +9,11 @@ public interface UsuarioRepository {
 
     public Usuario Salvar(Usuario usuario);
 
-    public Usuario AdicionarContato(Long idUsuario, Long idAgenda);
-
     public Usuario Editar(Usuario usuario);
     public Optional<Usuario> BuscarPorId(Long id);
 
     public List<Usuario> ListarUsuarios();
+
+    public void DeletarUsuario(Long id);
 
 }

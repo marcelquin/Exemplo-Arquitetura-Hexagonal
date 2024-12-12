@@ -40,17 +40,6 @@ public class UsuarioRepositoryImp implements UsuarioRepository {
         return usuario;
     }
 
-    @Override
-    public Usuario AdicionarContato(Long idUsuario, Long idContato)
-    {
-       Contato contato = contatoRepository.BuscarPorId(idContato).get();
-        ContatoEntity contatoEntity = contatoMapper.DtoToEntity(contato);
-       UsuarioEntity usuario = usuarioEntityRepository.findById(idUsuario).orElseThrow(()-> new EntityNotFoundException());
-       usuario.getAgenda().add(contatoEntity);
-       usuarioEntityRepository.save(usuario);
-       Usuario response = usuarioMappper.EntityToDto(usuario);
-       return response;
-    }
 
     @Override
     public Usuario Editar(Usuario usuario)
@@ -92,5 +81,11 @@ public class UsuarioRepositoryImp implements UsuarioRepository {
             response.add(usuario);
         }
         return response;
+    }
+
+    @Override
+    public void DeletarUsuario(Long id)
+    {
+
     }
 }
