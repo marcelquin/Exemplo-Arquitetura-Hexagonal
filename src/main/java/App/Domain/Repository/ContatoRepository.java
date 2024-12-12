@@ -10,6 +10,7 @@ public interface ContatoRepository {
 
     public Contato Editar(Contato contato);
     public Optional<Contato> BuscarPorId(Long id);
+    public void DeletarContato(Long id);
 
 
 }

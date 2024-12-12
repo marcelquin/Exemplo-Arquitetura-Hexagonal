@@ -88,4 +88,13 @@ public class ContatoRepositoryImp implements ContatoRepository {
         }
         return null;
     }
+
+    @Override
+    public void DeletarContato(Long id)
+    {
+       if(id != null)
+       {
+           repository.deleteById(id);
+       }
+    }
 }
