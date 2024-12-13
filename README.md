@@ -2,4 +2,3 @@
 
 - **Uma Arquitetura Hexagonal divide as classes de um sistema em dois grupos principais:** 1. Classes de domínio, isto é, diretamente relacionadas com o negócio do sistema. 2. Classes relacionadas com infraestrutura, tecnologias e responsáveis pela integração com sistemas externos (tais como bancos de dados). 3.Além disso, em uma Arquitetura Hexagonal, **classes de domínio não devem depender de classes relacionadas com infraestrutura, tecnologias ou sistemas externos.** A vantagem dessa divisão é desacoplar esses dois tipos de classes.
 
-![hexagonal](hexagonal.png)
