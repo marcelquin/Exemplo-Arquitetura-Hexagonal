@@ -1,9 +1,11 @@
 package App.Domain.Repository;
 
 import App.Domain.Entity.Contato;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+@Repository
 public interface ContatoRepository {
 
     public Contato Salvar(Contato contato);

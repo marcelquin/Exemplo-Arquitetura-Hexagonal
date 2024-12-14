@@ -13,6 +13,7 @@ import App.Util.UsuarioMappper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,26 +36,51 @@ public class UsuarioRepositoryImp implements UsuarioRepository {
     @Override
     public Usuario Salvar(Usuario usuario)
     {
-        UsuarioEntity entity = usuarioMappper.DtoToEntity(usuario);
-        usuarioEntityRepository.save(entity);
-        return usuario;
+        if(usuario.getId() == null)
+        {
+            UsuarioEntity entity = usuarioMappper.DtoToEntity(usuario);
+            List<ContatoEntity> contatos = new ArrayList<>();
+            entity.setAgenda(contatos);
+            usuarioEntityRepository.save(entity);
+            return usuario;
+        }
+        return null;
     }
 
 
     @Override
     public Usuario Editar(Usuario usuario)
     {
-        if(usuario.getId() != null)
+        UsuarioEntity entity = usuarioEntityRepository.findById(usuario.getId()).orElseThrow(()-> new EntityNotFoundException());
+        entity.setNome(usuario.getNome());
+        usuarioEntityRepository.save(entity);
+        Usuario response = usuarioMappper.EntityToDto(entity);
+        return response;
+    }
+
+    @Override
+    public Usuario Adicionar(Long idUsuario, Long idContato)
+    {
+        try
         {
-           UsuarioEntity entity = usuarioEntityRepository.findById(usuario.getId()).orElseThrow(()-> new EntityNotFoundException());
-           entity.setNome(usuario.getNome());
-           entity.setAgenda(usuario.getAgenda());
-           usuarioEntityRepository.save(entity);
-           Usuario response = usuarioMappper.EntityToDto(entity);
-           return response;
+            if(idUsuario != null && idContato != null)
+            {
+                UsuarioEntity entity = usuarioEntityRepository.findById(idUsuario).orElseThrow(()-> new EntityNotFoundException());
+                Contato contato = contatoRepository.BuscarPorId(idContato).orElseThrow(()-> new EntityNotFoundException());
+                ContatoEntity contatoEntity = new ContatoEntity(contato);
+                entity.getAgenda().add(contatoEntity);
+                usuarioEntityRepository.save(entity);
+                Usuario response = new Usuario(entity);
+                return response;
+            }
+            else
+            {throw new NullargumentsException();}
         }
-        else
-        { throw new NullargumentsException();}
+        catch (Exception e)
+        {
+            e.getMessage();
+        }
+        return null;
     }
 
     @Override

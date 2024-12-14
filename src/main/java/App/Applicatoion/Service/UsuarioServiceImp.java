@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -79,8 +81,10 @@ public class UsuarioServiceImp implements UsuarioService {
             {
                 Usuario usuario = new Usuario();
                 usuario.setNome(nome);
-                Usuario salvo = usuarioRepository.Salvar(usuario);
-                return new ResponseEntity<>(salvo, HttpStatus.CREATED);
+                System.out.println(usuario.getNome());
+                usuarioRepository.Salvar(usuario);
+
+                return new ResponseEntity<>(HttpStatus.CREATED);
             }
             else
             {throw new NullargumentsException();}
@@ -99,14 +103,10 @@ public class UsuarioServiceImp implements UsuarioService {
         {
             if( id != null && nome != null && telefone != null)
             {
+                Contato contato = caseContatoPost.NovoContato(nome,telefone).getBody();
                 Usuario usuario = usuarioRepository.BuscarPorId(id).get();
-                UsuarioEntity entity = usuarioMappper.DtoToEntity(usuario);
-                Contato contato = caseContatoPost.NovoContato(nome, telefone).getBody();
-                ContatoEntity contatoSalvar = contatoMapper.DtoToEntity(contato);
-                entity.getAgenda().add(contatoSalvar);
-                Usuario usuarioSalvar = usuarioMappper.EntityToDto(entity);
-                usuarioRepository.Salvar(usuarioSalvar);
-                return new ResponseEntity<>(usuarioSalvar, HttpStatus.OK);
+                usuarioRepository.Adicionar(id,contato.getId());
+                return new ResponseEntity<>(HttpStatus.OK);
             }
             else
             {throw new NullargumentsException();}

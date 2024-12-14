@@ -8,11 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
+
 @Entity
-@Table(name = "agenda")
+@Table(name = "usuario")
 public class UsuarioEntity {
 
     @Id
@@ -24,9 +22,41 @@ public class UsuarioEntity {
     @OneToMany
     List<ContatoEntity> agenda;
 
+    public UsuarioEntity() {
+    }
+
+    public UsuarioEntity(Long id, String nome, List<ContatoEntity> agenda) {
+        this.id = id;
+        this.nome = nome;
+        this.agenda = agenda;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public List<ContatoEntity> getAgenda() {
+        return agenda;
+    }
+
+    public void setAgenda(List<ContatoEntity> agenda) {
+        this.agenda = agenda;
+    }
+
     public UsuarioEntity(Usuario usuario) {
         this.id = usuario.getId();
         this.nome = usuario.getNome();
-        this.agenda = usuario.getAgenda();
     }
 }

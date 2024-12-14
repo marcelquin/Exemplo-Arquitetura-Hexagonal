@@ -11,15 +11,15 @@ public class Usuario {
 
     private String nome;
 
-    List<Contato> contatoes;
+    List<Contato> contatos;
 
     public Usuario() {
     }
 
-    public Usuario(Long id, String nome, List<Contato> contatoes) {
+    public Usuario(Long id, String nome, List<Contato> contatos) {
         this.id = id;
         this.nome = nome;
-        this.contatoes = contatoes;
+        this.contatos = contatos;
     }
 
     public Usuario(UsuarioEntity usuarioEntity) {
@@ -44,11 +44,11 @@ public class Usuario {
         this.nome = nome;
     }
 
-    public List<ContatoEntity> getAgenda() {
-        return contatoes;
+    public List<Contato> getAgenda() {
+        return contatos;
     }
 
     public void setAgenda(List<Contato> contatoes) {
-        this.contatoes = contatoes;
+        this.contatos = contatoes;
     }
 }

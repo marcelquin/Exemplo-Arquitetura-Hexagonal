@@ -31,7 +31,8 @@ public class ContatoRepositoryImp implements ContatoRepository {
            {
                ContatoEntity entity = contatoMapper.DtoToEntity(contato);
                repository.save(entity);
-               return contato;
+               Contato response = contatoMapper.EntityToDto(entity);
+               return response;
            }
            else
            {throw new NullargumentsException();}
@@ -50,7 +51,6 @@ public class ContatoRepositoryImp implements ContatoRepository {
         {
             if(contato != null)
             {
-
                 ContatoEntity entity = repository.findById(contato.getId()).orElseThrow(()-> new EntityNotFoundException());
                 entity.setNome(contato.getNome());
                 entity.setNumero(contato.getNumero());
