@@ -7,9 +7,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "post",
+@OpenAPIDefinition(info = @Info(title = "Post",
 		version = "1",
 		description = "Descrição breve"))
+//@ComponentScan(basePackages = "App.Entity.PostagemEntity")
 public class MhqaApplication {
 
 	public static void main(String[] args) {

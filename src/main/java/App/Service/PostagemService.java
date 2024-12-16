@@ -6,8 +6,10 @@ import App.Entity.ComentarioEntity;
 import App.Entity.PostagemEntity;
 import App.Exception.EntityNotFoundException;
 import App.Exception.NullargumentsException;
+import App.Mapper.PostagemMapper;
 import App.Repository.ComentarioRepositoty;
 import App.Repository.PostagemRepositoty;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,21 +23,27 @@ public class PostagemService implements PostagemGateway {
 
     private final ComentarioRepositoty comentarioRepositoty;
     private final PostagemRepositoty postagemRepositoty;
+    @Autowired
+    private PostagemMapper postagemMapper;
 
     public PostagemService(ComentarioRepositoty comentarioRepositoty, PostagemRepositoty postagemRepositoty) {
         this.comentarioRepositoty = comentarioRepositoty;
         this.postagemRepositoty = postagemRepositoty;
     }
 
+    @Override
     public ResponseEntity<List<PostagemResponse>> ListarPostagens()
     {
         try
         {
             List<PostagemEntity> postagems = postagemRepositoty.findAll();
-            if(postagems != null)
+            List<PostagemResponse> responseLista = new ArrayList<>();
+            for(PostagemEntity entity : postagems)
             {
-                System.out.println("ok");
+                PostagemResponse response = postagemMapper.EntitytoDto(entity);
+                responseLista.add(response);
             }
+            return new ResponseEntity<>(responseLista, HttpStatus.OK);
         }
         catch (Exception e)
         {
@@ -43,7 +51,7 @@ public class PostagemService implements PostagemGateway {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
-
+    @Override
     public ResponseEntity<PostagemResponse> BuscarPostagemPorId(Long id)
     {
         try
@@ -53,10 +61,8 @@ public class PostagemService implements PostagemGateway {
                 PostagemEntity entity = postagemRepositoty.findById(id).orElseThrow(
                         ()-> new EntityNotFoundException()
                 );
-                if(entity != null)
-                {
-                    System.out.println("ok");
-                }
+                PostagemResponse response = postagemMapper.EntitytoDto(entity);
+                return new ResponseEntity<>(response,HttpStatus.OK);
             }
             else
             {throw new NullargumentsException();}
@@ -67,6 +73,8 @@ public class PostagemService implements PostagemGateway {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
    }
+
+   @Override
     public ResponseEntity<PostagemResponse> NovaPostagem(String titulo, String conteudo)
     {
         try
@@ -77,6 +85,8 @@ public class PostagemService implements PostagemGateway {
                 entity.setTitulo(titulo);
                 entity.setConteudo(conteudo);
                 postagemRepositoty.save(entity);
+                PostagemResponse response = postagemMapper.EntitytoDto(entity);
+                return new ResponseEntity<>(response,HttpStatus.CREATED);
             }
             else
             {
@@ -90,6 +100,7 @@ public class PostagemService implements PostagemGateway {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @Override
     public ResponseEntity<PostagemResponse> EditarPostagem(Long id,
                                                            String titulo,
                                                            String conteudo)
@@ -101,11 +112,11 @@ public class PostagemService implements PostagemGateway {
                 PostagemEntity entity = postagemRepositoty.findById(id).orElseThrow(
                         ()-> new EntityNotFoundException()
                 );
-                List<ComentarioEntity> comentarios = new ArrayList<>();
                 entity.setTitulo(titulo);
                 entity.setConteudo(conteudo);
-                entity.setComentarios(comentarios);
                 postagemRepositoty.save(entity);
+                PostagemResponse response = postagemMapper.EntitytoDto(entity);
+                return new ResponseEntity<>(response,HttpStatus.CREATED);
             }
         }
         catch (Exception e)
@@ -115,6 +126,7 @@ public class PostagemService implements PostagemGateway {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @Override
     public ResponseEntity<PostagemResponse> AdicionarComentario(Long id, String comentario)
     {
         try
@@ -129,6 +141,8 @@ public class PostagemService implements PostagemGateway {
                 comentarioRepositoty.save(comentarioEntity);
                 entity.getComentarios().add(comentarioEntity);
                 postagemRepositoty.save(entity);
+                PostagemResponse response = postagemMapper.EntitytoDto(entity);
+                return new ResponseEntity<>(response,HttpStatus.CREATED);
             }
             else
             {throw new NullargumentsException();}
@@ -140,6 +154,7 @@ public class PostagemService implements PostagemGateway {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @Override
     public void DeletarPostagem(Long id)
     {
         try

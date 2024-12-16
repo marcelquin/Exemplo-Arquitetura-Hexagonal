@@ -5,10 +5,12 @@ import App.CleanArch.Infra.UseCase.UseCasePostagemGet;
 import App.CleanArch.Infra.UseCase.UseCasePostagemPost;
 import App.CleanArch.Infra.UseCase.UseCasePostagemPut;
 import App.Dto.Response.PostagemResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +27,7 @@ public class PostagemController {
     private final UseCasePostagemPut casePostagemPut;
     private final UseCasePostagemGet casePostagemGet;
     private final UseCasePostagemDelete casePostagemDelete;
+
 
     public PostagemController(UseCasePostagemPost casePostagemPost, UseCasePostagemPut casePostagemPut, UseCasePostagemGet casePostagemGet, UseCasePostagemDelete casePostagemDelete) {
         this.casePostagemPost = casePostagemPost;
