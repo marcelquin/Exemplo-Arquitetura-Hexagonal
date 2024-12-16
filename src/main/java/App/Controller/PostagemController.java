@@ -1,11 +1,18 @@
 package App.Controller;
 
-import App.Service.PostagemService;
+import App.CleanArch.Infra.UseCase.UseCasePostagemDelete;
+import App.CleanArch.Infra.UseCase.UseCasePostagemGet;
+import App.CleanArch.Infra.UseCase.UseCasePostagemPost;
+import App.CleanArch.Infra.UseCase.UseCasePostagemPut;
+import App.Dto.Response.PostagemResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("post")
@@ -14,12 +21,18 @@ import org.springframework.web.bind.annotation.*;
 )
 public class PostagemController {
 
-    private final PostagemService service;
+    private final UseCasePostagemPost casePostagemPost;
+    private final UseCasePostagemPut casePostagemPut;
+    private final UseCasePostagemGet casePostagemGet;
+    private final UseCasePostagemDelete casePostagemDelete;
 
-
-    public PostagemController(PostagemService service) {
-        this.service = service;
+    public PostagemController(UseCasePostagemPost casePostagemPost, UseCasePostagemPut casePostagemPut, UseCasePostagemGet casePostagemGet, UseCasePostagemDelete casePostagemDelete) {
+        this.casePostagemPost = casePostagemPost;
+        this.casePostagemPut = casePostagemPut;
+        this.casePostagemGet = casePostagemGet;
+        this.casePostagemDelete = casePostagemDelete;
     }
+
 
     @Operation(summary = "Busca Registros da tabela Por id", method = "GET")
     @ApiResponses(value = {
@@ -29,8 +42,8 @@ public class PostagemController {
             @ApiResponse(responseCode = "500", description = "Ops algoo deu errado"),
     })
     @GetMapping("/ListarPostagens")
-    public void ListarPostagens()
-    {service.ListarPostagens();}
+    public ResponseEntity<List<PostagemResponse>> ListarPostagens()
+    {return casePostagemGet.ListarPostagens();}
 
     @Operation(summary = "Busca Registros da tabela Por id", method = "GET")
     @ApiResponses(value = {
@@ -40,8 +53,8 @@ public class PostagemController {
             @ApiResponse(responseCode = "500", description = "Ops algoo deu errado"),
     })
     @GetMapping("/BuscarPostagemPorId")
-    public void BuscarPostagemPorId(Long id)
-    {service.BuscarPostagemPorId(id);}
+    public ResponseEntity<PostagemResponse> BuscarPostagemPorId(Long id)
+    {return casePostagemGet.BuscarPostagemPorId(id);}
 
     @Operation(summary = "Salva novo Registro na tabela", method = "POST")
     @ApiResponses(value = {
@@ -51,8 +64,8 @@ public class PostagemController {
             @ApiResponse(responseCode = "500", description = "Ops algoo deu errado"),
     })
     @PostMapping("/NovaPostagem")
-    public void NovaPostagem(String titulo, String conteudo)
-    {service.NovaPostagem(titulo, conteudo);}
+    public ResponseEntity<PostagemResponse> NovaPostagem(String titulo, String conteudo)
+    {return casePostagemPost.NovaPostagem(titulo, conteudo);}
 
     @Operation(summary = "Edita Registro na tabela", method = "PUT")
     @ApiResponses(value = {
@@ -62,10 +75,10 @@ public class PostagemController {
             @ApiResponse(responseCode = "500", description = "Ops algoo deu errado"),
     })
     @PutMapping("/EditarPostagem")
-    public void EditarPostagem(Long id,
+    public ResponseEntity<PostagemResponse> EditarPostagem(Long id,
                                String titulo,
                                String conteudo)
-    {service.EditarPostagem(id, titulo, conteudo);}
+    {return casePostagemPut.EditarPostagem(id, titulo, conteudo);}
 
     @Operation(summary = "Edita Registro na tabela", method = "PUT")
     @ApiResponses(value = {
@@ -75,8 +88,8 @@ public class PostagemController {
             @ApiResponse(responseCode = "500", description = "Ops algoo deu errado"),
     })
     @PutMapping("/AdicionarComentario")
-    public void AdicionarComentario(Long id, String comentario)
-    { service.AdicionarComentario(id, comentario);}
+    public ResponseEntity<PostagemResponse> AdicionarComentario(Long id, String comentario)
+    {return casePostagemPut.AdicionarComentario(id, comentario);}
 
     @Operation(summary = "Deleta Registro na tabela", method = "DELETE")
     @ApiResponses(value = {
@@ -87,5 +100,5 @@ public class PostagemController {
     })
     @DeleteMapping("/DeletarPostagem")
     public void DeletarPostagem(Long id)
-    {service.DeletarPostagem(id);}
+    {casePostagemDelete.DeletarPostagem(id);}
 }

@@ -1,18 +1,22 @@
 package App.Service;
 
+import App.CleanArch.Infra.Gateway.PostagemGateway;
+import App.Dto.Response.PostagemResponse;
 import App.Entity.ComentarioEntity;
 import App.Entity.PostagemEntity;
 import App.Exception.EntityNotFoundException;
 import App.Exception.NullargumentsException;
 import App.Repository.ComentarioRepositoty;
 import App.Repository.PostagemRepositoty;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class PostagemService {
+public class PostagemService implements PostagemGateway {
 
 
     private final ComentarioRepositoty comentarioRepositoty;
@@ -23,7 +27,7 @@ public class PostagemService {
         this.postagemRepositoty = postagemRepositoty;
     }
 
-    public void ListarPostagens()
+    public ResponseEntity<List<PostagemResponse>> ListarPostagens()
     {
         try
         {
@@ -37,9 +41,10 @@ public class PostagemService {
         {
             e.getMessage();
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    public void BuscarPostagemPorId(Long id)
+    public ResponseEntity<PostagemResponse> BuscarPostagemPorId(Long id)
     {
         try
         {
@@ -60,8 +65,9 @@ public class PostagemService {
         {
             e.getMessage();
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
    }
-    public void NovaPostagem(String titulo, String conteudo)
+    public ResponseEntity<PostagemResponse> NovaPostagem(String titulo, String conteudo)
     {
         try
         {
@@ -81,11 +87,12 @@ public class PostagemService {
         {
             e.getMessage();
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    public void EditarPostagem(Long id,
-                               String titulo,
-                               String conteudo)
+    public ResponseEntity<PostagemResponse> EditarPostagem(Long id,
+                                                           String titulo,
+                                                           String conteudo)
     {
         try
         {
@@ -105,9 +112,10 @@ public class PostagemService {
         {
             e.getMessage();
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    public void AdicionarComentario(Long id, String comentario)
+    public ResponseEntity<PostagemResponse> AdicionarComentario(Long id, String comentario)
     {
         try
         {
@@ -129,6 +137,7 @@ public class PostagemService {
         {
             e.getMessage();
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     public void DeletarPostagem(Long id)
